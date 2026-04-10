@@ -11,8 +11,7 @@ def test_empty_courses_list(courses_list_page: CoursesListPage):
     courses_list_page.sidebar.check_visible()
     courses_list_page.navbar.check_visible('username')
 
-    courses_list_page.check_visible_create_course_button()
-    courses_list_page.check_visible_courses_title()
+    courses_list_page.toolbar_view.check_visible()
     courses_list_page.check_visible_empty_view()
 
 @pytest.mark.courses
@@ -22,8 +21,7 @@ def test_create_course(create_course_page: CreateCoursePage, courses_list_page: 
 
     create_course_page.check_visible_create_course_title()
     create_course_page.check_disabled_create_course_button()
-    create_course_page.check_visible_image_preview_empty_view()
-    create_course_page.check_visible_image_upload_view()
+    create_course_page.image_upload_widget.check_visible(is_image_uploaded=False)
     create_course_page.check_visible_create_course_form(
         title='',
         description='',
@@ -36,8 +34,8 @@ def test_create_course(create_course_page: CreateCoursePage, courses_list_page: 
     create_course_page.check_visible_create_exercise_button()
     create_course_page.check_visible_exercises_empty_view()
 
-    create_course_page.upload_preview_image(file='./test_data/files/image.png')
-    create_course_page.check_visible_image_upload_view(is_image_uploaded=True)
+    create_course_page.image_upload_widget.upload_preview_image(file='./test_data/files/image.png')
+    create_course_page.image_upload_widget.check_visible(is_image_uploaded=True)
     create_course_page.fill_create_course_form(
         title='Playwright',
         estimated_time='2 weeks',
@@ -47,11 +45,10 @@ def test_create_course(create_course_page: CreateCoursePage, courses_list_page: 
     )
     create_course_page.click_create_course_button()
 
-    courses_list_page.check_visible_courses_title()
-    courses_list_page.check_visible_create_course_button()
-    courses_list_page.check_visible_course_card(
+    courses_list_page.toolbar_view.check_visible()
+    courses_list_page.course_view.check_visible(
         index=0,
-        text='Playwright',
+        title='Playwright',
         max_score='100',
         min_score='10',
         estimated_time='2 weeks'
