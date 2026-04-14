@@ -1,6 +1,8 @@
 from pages.base_page import BasePage
 from components.views.empty_view_component import EmptyViewComponent
 from components.views.image_upload_widget_component import ImageUploadWidgetComponent
+from components.courses.create_course_exercise_form_component import CreateCourseExerciseFormComponent
+from components.navigation.navbar_component import NavbarComponent
 from playwright.sync_api import Page, expect
 
 class CreateCoursePage(BasePage):
@@ -9,6 +11,8 @@ class CreateCoursePage(BasePage):
 
         self.exercises_empty_view = EmptyViewComponent(page, identifier='create-course-exercises')
         self.image_upload_widget = ImageUploadWidgetComponent(page, identifier='create-course-preview')
+        self.create_course_exercise_form_component = CreateCourseExerciseFormComponent(page)
+        self.navbar = NavbarComponent(page)
 
         # Заголовок и кнопка создания курса
         self.create_course_title = page.get_by_test_id('create-course-toolbar-title-text')
@@ -103,33 +107,3 @@ class CreateCoursePage(BasePage):
             title='There is no exercises',
             description='Click on "Create exercise" button to create new exercise'
         )
-
-    def click_delete_exercise_button(self, index: int):
-        delete_exercise_button = self.page.get_by_test_id(
-            f'create-course-exercise-{index}-box-toolbar-delete-exercise-button'
-        )
-        delete_exercise_button.click()
-
-    def check_visible_create_exercise_form(self, index: int, title: str, description: str):
-        exercise_subtitle = self.page.get_by_test_id(f'create-course-exercise-{index}-box-toolbar-subtitle-text')
-        exercise_title = self.page.get_by_test_id(f'create-course-exercise-form-title-{index}-input')
-        exercise_description = self.page.get_by_test_id(f'create-course-exercise-form-description-{index}-input')
-
-        expect(exercise_subtitle).to_be_visible()
-        expect(exercise_subtitle).to_have_text(f'#{index+1} Exercise')
-
-        expect(exercise_title).to_be_visible()
-        expect(exercise_title).to_have_value(title)
-
-        expect(exercise_description).to_be_visible()
-        expect(exercise_description).to_have_value(description)
-
-    def fill_create_exercise_form(self, index: int, title: str, description: str):
-        exercise_title = self.page.get_by_test_id(f'create-course-exercise-form-title-{index}-input')
-        exercise_description = self.page.get_by_test_id(f'create-course-exercise-form-description-{index}-input')
-
-        exercise_title.fill(title)
-        expect(exercise_title).to_have_value(title)
-
-        exercise_description.fill(description)
-        expect(exercise_description).to_have_value(description)
