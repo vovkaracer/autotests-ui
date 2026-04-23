@@ -15,7 +15,7 @@ class CreateCourseFormComponent(BaseComponent):
         self.max_score_input = page.get_by_test_id('create-course-form-max-score-input').locator('input')
         self.min_score_input = page.get_by_test_id('create-course-form-min-score-input').locator('input')
 
-    def check_visible_create_course_form(
+    def check_visible(
             self,
             title: str,
             estimated_time: str,
@@ -38,7 +38,7 @@ class CreateCourseFormComponent(BaseComponent):
         expect(self.min_score_input).to_be_visible()
         expect(self.min_score_input).to_have_value(min_score)
 
-    def fill_create_course_form(
+    def fill(
             self,
             title: str,
             estimated_time: str,
