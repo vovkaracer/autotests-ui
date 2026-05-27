@@ -1,4 +1,4 @@
-from pages.login_page import LoginPage
+from pages.authentication.login_page import LoginPage
 import pytest
 
 @pytest.mark.regression

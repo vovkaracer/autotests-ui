@@ -1,5 +1,5 @@
-from pages.registration_page import RegistrationPage
-from pages.dashboard_page import DashboardPage
+from pages.authentication.registration_page import RegistrationPage
+from pages.dashboard.dashboard_page import DashboardPage
 import pytest
 
 @pytest.mark.regression
