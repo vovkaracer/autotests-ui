@@ -1,6 +1,7 @@
 from pages.courses.create_course_page import CreateCoursePage
 from pages.courses.courses_page import CoursesListPage
 import pytest
+from re import compile
 
 @pytest.mark.courses
 @pytest.mark.regression
@@ -49,3 +50,49 @@ class TestCourses:
             min_score='10',
             estimated_time='2 weeks'
         )
+
+    def test_edit_course(self, create_course_page: CreateCoursePage, courses_list_page: CoursesListPage):
+        create_course_page.visit('https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/courses/create')
+
+        create_course_page.create_course_form.fill(
+            title='Test course',
+            estimated_time='1h',
+            description='Description for test course',
+            max_score='10',
+            min_score='5'
+        )
+        create_course_page.image_upload_widget.upload_preview_image(file='./test_data/files/image.png')
+        create_course_page.image_upload_widget.check_visible(is_image_uploaded=True)
+        create_course_page.create_course_toolbar_view.click_create_course_button()
+
+        courses_list_page.check_current_url(compile('.*/#/courses'))
+        courses_list_page.course_view.check_visible(
+            index=0,
+            title='Test course',
+            max_score='10',
+            min_score='5',
+            estimated_time='1h'
+        )
+        courses_list_page.course_view.menu.click_edit(index=0)
+
+        create_course_page.create_course_form.fill(
+            title='Test course 2',
+            estimated_time='1h30m',
+            description='Description 2 for test course',
+            max_score='15',
+            min_score='7'
+        )
+        create_course_page.create_course_toolbar_view.click_create_course_button()
+
+        courses_list_page.check_current_url(compile('.*/#/courses'))
+        courses_list_page.course_view.check_visible(
+            index=0,
+            title='Test course 2',
+            estimated_time='1h30m',
+            max_score='15',
+            min_score='7'
+        )
+
+
+
+
